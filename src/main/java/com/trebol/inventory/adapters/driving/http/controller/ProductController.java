@@ -1,21 +1,28 @@
 package com.trebol.inventory.adapters.driving.http.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trebol.inventory.adapters.driving.http.dto.request.CreateProduct;
 import com.trebol.inventory.adapters.driving.http.mapper.request.IProductRequestMapper;
 import com.trebol.inventory.configuration.exceptionhandler.ExceptionResponse;
 import com.trebol.inventory.domain.api.IProductServicePort;
 import com.trebol.inventory.domain.model.ProductsCategory;
+import com.trebol.inventory.domain.model.Brand;
+import com.trebol.inventory.domain.model.Category;
+import com.trebol.inventory.domain.model.UnitMeasure;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,36 +32,49 @@ public class ProductController {
 
     private final IProductServicePort productService;
     private final IProductRequestMapper requestMapper;
+    private final ObjectMapper objectMapper;
 
-    /**
-     * Crea un nuevo producto.
-     *
-     * @param createProduct el producto a crear
-     * @return 201 Created si el producto se creó exitosamente,
-     *         409 Conflict si la marca o la categoría no existen
-     */
     @Operation(summary = "Crea un nuevo producto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Producto creado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Conflicto: la marca o categoría no existen", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ExceptionResponse.class)))
+            @ApiResponse(responseCode = "404", description = "Conflicto: la marca o categoría no existen",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping("/")
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody CreateProduct createProduct) {
-        productService.createProduct(requestMapper.toProduct(createProduct));
+    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> createProduct(
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("minStock") Integer minStock,
+            @RequestParam("maxStock") Integer maxStock,
+            @RequestParam("category") String categoryId,
+            @RequestParam("brand") String brandId,
+            @RequestParam("unitMeasure") String unitMeasureId,
+            @RequestParam("measuredValue") String measuredValue) throws Exception {
+
+
+        Category category = objectMapper.readValue(categoryId, Category.class);
+        Brand brand = objectMapper.readValue(brandId, Brand.class);
+        UnitMeasure unitMeasure = objectMapper.readValue(unitMeasureId, UnitMeasure.class);
+        CreateProduct createProduct = new CreateProduct(
+                name,
+                description,
+                minStock,
+                maxStock,
+                category,
+                brand,
+                unitMeasure,
+                measuredValue
+        );
+        productService.createProduct(requestMapper.toProduct(createProduct), image);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /**
-     * Elimina un producto por su ID.
-     *
-     * @param id el ID del producto a eliminar
-     * @return 204 No Content si el producto se eliminó exitosamente,
-     *         404 Not Found si el producto no existe
-     */
     @Operation(summary = "Elimina un producto por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Producto eliminado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
@@ -62,19 +82,12 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Obtiene una lista de productos agrupados por categoría.
-     *
-     * @return 200 OK y la lista de productos agrupados por categoría
-     */
     @Operation(summary = "Obtiene una lista de productos agrupados por categoría")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de productos agrupados por categoría")
     })
     @GetMapping("/")
     public ResponseEntity<List<ProductsCategory>> getProductsByCategory() {
-        return ResponseEntity.ok(
-                productService.getAllProducts()
-        );
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 }

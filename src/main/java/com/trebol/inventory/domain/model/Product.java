@@ -18,6 +18,7 @@ public class Product {
     private Category category;
     private Brand brand;
     private UnitMeasure unitMeasure;
+    private String measuredValue;
     private boolean active;
 
 }

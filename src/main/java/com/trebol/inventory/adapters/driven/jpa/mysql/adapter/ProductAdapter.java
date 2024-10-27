@@ -17,6 +17,7 @@ public class ProductAdapter implements IProductPersistencePort {
 
     @Override
     public void createProduct(Product product) {
+        System.out.println(mapper.toProductEntity(product));
         repository.save(mapper.toProductEntity(product));
     }
 

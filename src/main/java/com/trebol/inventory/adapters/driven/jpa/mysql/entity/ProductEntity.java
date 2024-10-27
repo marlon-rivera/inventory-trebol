@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "product")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ProductEntity {
 
     @Id
@@ -17,7 +19,8 @@ public class ProductEntity {
     private String name;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String image;
     @Column(nullable = false)
     private Integer minStock;
@@ -32,6 +35,8 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "unit_measure_id", nullable = false)
     private UnitMeasureEntity unitMeasure;
+    @Column(nullable = false)
+    private String measuredValue;
     @Column(nullable = false)
     private boolean active;
 }

@@ -1,5 +1,7 @@
 package com.trebol.inventory.configuration;
 
+import com.google.cloud.storage.Storage;
+import com.trebol.inventory.adapters.driven.firebase.FirebaseAdapter;
 import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.repository.*;
@@ -61,8 +63,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IProductServicePort productServicePort(){
-        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort());
+    public IProductServicePort productServicePort(Storage storage){
+        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort(), new FirebaseAdapter(storage));
     }
 
     @Bean

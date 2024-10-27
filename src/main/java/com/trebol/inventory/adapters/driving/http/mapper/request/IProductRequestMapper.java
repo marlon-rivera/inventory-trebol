@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface IProductRequestMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "unitMeasure", source = "createProduct.unitMeasure")
     @Mapping(target = "active", ignore = true)
     Product toProduct(CreateProduct createProduct);

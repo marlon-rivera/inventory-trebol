@@ -8,11 +8,9 @@ import com.trebol.inventory.domain.exception.UnitMeasureNotExistsException;
 import com.trebol.inventory.domain.model.Category;
 import com.trebol.inventory.domain.model.Product;
 import com.trebol.inventory.domain.model.ProductsCategory;
-import com.trebol.inventory.domain.spi.IBrandPersistencePort;
-import com.trebol.inventory.domain.spi.ICategoryPersistencePort;
-import com.trebol.inventory.domain.spi.IProductPersistencePort;
-import com.trebol.inventory.domain.spi.IUnitMeasurePersistencePort;
+import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +24,20 @@ public class ProductUseCaseImpl implements IProductServicePort {
     private final ICategoryPersistencePort categoryPersistencePort;
     private final IBrandPersistencePort brandPersistencePort;
     private final IUnitMeasurePersistencePort unitMeasurePersistencePort;
+    private final IStorageImagePort storageImagePort;
 
     @Override
-    public void createProduct(Product product) {
-        System.out.println(product);
+    public void createProduct(Product product, MultipartFile image) throws Exception {
         Optional<Category> categoryOp = categoryPersistencePort.getCategoryById(product.getCategory().getId());
         if(categoryOp.isEmpty()) throw new CategoryNotExistsException();
         if(brandPersistencePort.getBrandById(product.getBrand().getId()).isEmpty()) throw new BrandNotExistsException();
         if(unitMeasurePersistencePort.getUnitMeasureById(product.getUnitMeasure().getId()).isEmpty()) throw new UnitMeasureNotExistsException();
+        product.setImage(storageImagePort.uploadImage(image));
         product.setActive(true);
         String productId = generateIdProduct(categoryOp.get());
         product.setId(productId);
+        System.out.println(product.getImage());
+        System.out.println(product.getImage().length());
         productPersistencePort.createProduct(product);
     }
 

@@ -7,18 +7,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class CreateProduct {
 
     @NotNull
     private String name;
     @NotNull
     private String description;
-    @NotNull
-    private String image;
     @NotNull
     private Integer minStock;
     @NotNull
@@ -29,5 +30,7 @@ public class CreateProduct {
     private Brand brand;
     @NotNull
     private UnitMeasure unitMeasure;
+    @NotNull
+    private String measuredValue;
 
 }
