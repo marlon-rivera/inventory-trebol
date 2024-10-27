@@ -17,6 +17,7 @@ public class Product {
     private Integer maxStock;
     private Category category;
     private Brand brand;
+    private UnitMeasure unitMeasure;
     private boolean active;
 
 }

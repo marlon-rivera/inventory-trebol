@@ -14,5 +14,7 @@ public class Constants {
     public static final String CATEGORY_NOT_EXISTS = "La categoria que se requiere no existe.";
     public static final String PRODUCT_NOT_EXISTS = "El producto solicitado no existe.";
     public static final String CLIENT_ALREADY_EXISTS = "El cliente que desea crear, ya existe.";
+    public static final String UNIT_MEASURE_ALREADY_EXISTS = "La unidad de medida que desea crear, ya existe.";
+    public static final String UNIT_MEASURE_NOT_EXISTS = "La unidad de medida solicitada no existe.";
 
 }

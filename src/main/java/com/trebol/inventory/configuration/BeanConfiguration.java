@@ -1,29 +1,11 @@
 package com.trebol.inventory.configuration;
 
-import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.BrandAdapter;
-import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.CategoryAdapter;
-import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.ClientAdapter;
-import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.ProductAdapter;
-import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.IBrandEntityMapper;
-import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.ICategoryEntityMapper;
-import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.IClientEntityMapper;
-import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.IProductEntityMapper;
-import com.trebol.inventory.adapters.driven.jpa.mysql.repository.IBrandRepository;
-import com.trebol.inventory.adapters.driven.jpa.mysql.repository.ICategoryRepository;
-import com.trebol.inventory.adapters.driven.jpa.mysql.repository.IClientRepository;
-import com.trebol.inventory.adapters.driven.jpa.mysql.repository.IProductRepository;
-import com.trebol.inventory.domain.api.IBrandServicePort;
-import com.trebol.inventory.domain.api.ICategoryServicePort;
-import com.trebol.inventory.domain.api.IClientServicePort;
-import com.trebol.inventory.domain.api.IProductServicePort;
-import com.trebol.inventory.domain.api.usecase.BrandUseCaseImpl;
-import com.trebol.inventory.domain.api.usecase.CategoryUseCaseImpl;
-import com.trebol.inventory.domain.api.usecase.ClientUseCaseImpl;
-import com.trebol.inventory.domain.api.usecase.ProductUseCaseImpl;
-import com.trebol.inventory.domain.spi.IBrandPersistencePort;
-import com.trebol.inventory.domain.spi.ICategoryPersistencePort;
-import com.trebol.inventory.domain.spi.IClientPersistencePort;
-import com.trebol.inventory.domain.spi.IProductPersistencePort;
+import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.*;
+import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.*;
+import com.trebol.inventory.adapters.driven.jpa.mysql.repository.*;
+import com.trebol.inventory.domain.api.*;
+import com.trebol.inventory.domain.api.usecase.*;
+import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +22,8 @@ public class BeanConfiguration {
     private final IClientEntityMapper clientEntityMapper;
     private final IProductRepository productRepository;
     private final IProductEntityMapper productEntityMapper;
+    private final IUnitMeasureRepository unitMeasureRepository;
+    private final IUnitMeasureEntityMapper unitMeasureEntityMapper;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -78,6 +62,16 @@ public class BeanConfiguration {
 
     @Bean
     public IProductServicePort productServicePort(){
-        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort());
+        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort());
+    }
+
+    @Bean
+    public IUnitMeasurePersistencePort unitMeasurePersistencePort(){
+        return new UnitMeasureAdapter(unitMeasureRepository, unitMeasureEntityMapper);
+    }
+
+    @Bean
+    public IUnitMeasureServicePort unitMeasureServicePort(){
+        return new UnitMeasureUseCaseImpl(unitMeasurePersistencePort());
     }
 }

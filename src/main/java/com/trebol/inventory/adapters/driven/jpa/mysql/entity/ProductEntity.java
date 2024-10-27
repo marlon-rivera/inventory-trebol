@@ -29,6 +29,9 @@ public class ProductEntity {
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
     private BrandEntity brand;
+    @ManyToOne
+    @JoinColumn(name = "unit_measure_id", nullable = false)
+    private UnitMeasureEntity unitMeasure;
     @Column(nullable = false)
     private boolean active;
 }

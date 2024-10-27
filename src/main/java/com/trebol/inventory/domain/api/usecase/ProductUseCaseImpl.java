@@ -4,19 +4,20 @@ import com.trebol.inventory.domain.api.IProductServicePort;
 import com.trebol.inventory.domain.exception.BrandNotExistsException;
 import com.trebol.inventory.domain.exception.CategoryNotExistsException;
 import com.trebol.inventory.domain.exception.ProductNotExistsException;
+import com.trebol.inventory.domain.exception.UnitMeasureNotExistsException;
 import com.trebol.inventory.domain.model.Category;
 import com.trebol.inventory.domain.model.Product;
 import com.trebol.inventory.domain.model.ProductsCategory;
 import com.trebol.inventory.domain.spi.IBrandPersistencePort;
 import com.trebol.inventory.domain.spi.ICategoryPersistencePort;
 import com.trebol.inventory.domain.spi.IProductPersistencePort;
+import com.trebol.inventory.domain.spi.IUnitMeasurePersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ProductUseCaseImpl implements IProductServicePort {
@@ -24,12 +25,15 @@ public class ProductUseCaseImpl implements IProductServicePort {
     private final IProductPersistencePort productPersistencePort;
     private final ICategoryPersistencePort categoryPersistencePort;
     private final IBrandPersistencePort brandPersistencePort;
+    private final IUnitMeasurePersistencePort unitMeasurePersistencePort;
 
     @Override
     public void createProduct(Product product) {
+        System.out.println(product);
         Optional<Category> categoryOp = categoryPersistencePort.getCategoryById(product.getCategory().getId());
         if(categoryOp.isEmpty()) throw new CategoryNotExistsException();
         if(brandPersistencePort.getBrandById(product.getBrand().getId()).isEmpty()) throw new BrandNotExistsException();
+        if(unitMeasurePersistencePort.getUnitMeasureById(product.getUnitMeasure().getId()).isEmpty()) throw new UnitMeasureNotExistsException();
         product.setActive(true);
         String productId = generateIdProduct(categoryOp.get());
         product.setId(productId);
