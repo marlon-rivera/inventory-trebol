@@ -26,6 +26,8 @@ public class BeanConfiguration {
     private final IProductEntityMapper productEntityMapper;
     private final IUnitMeasureRepository unitMeasureRepository;
     private final IUnitMeasureEntityMapper unitMeasureEntityMapper;
+    private final ISupplierRepository supplierRepository;
+    private final ISupplierEntityMapper supplierEntityMapper;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -75,5 +77,15 @@ public class BeanConfiguration {
     @Bean
     public IUnitMeasureServicePort unitMeasureServicePort(){
         return new UnitMeasureUseCaseImpl(unitMeasurePersistencePort());
+    }
+
+    @Bean
+    public ISupplierPersistencePort supplierPersistencePort(){
+        return new SupplierAdapter(supplierRepository, supplierEntityMapper);
+    }
+
+    @Bean
+    public ISupplierServicePort supplierServicePort() {
+        return new SupplierUseCaseImpl(supplierPersistencePort());
     }
 }

@@ -16,5 +16,7 @@ public class Constants {
     public static final String CLIENT_ALREADY_EXISTS = "El cliente que desea crear, ya existe.";
     public static final String UNIT_MEASURE_ALREADY_EXISTS = "La unidad de medida que desea crear, ya existe.";
     public static final String UNIT_MEASURE_NOT_EXISTS = "La unidad de medida solicitada no existe.";
+    public static final String SUPPLIER_ALREADY_EXISTS = "El proveedor que desea guardar ya existe.";
+    public static final String SUPPLIER_NOT_EXISTS = "El proveedor que se requiere no existe.";
 
 }
