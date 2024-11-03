@@ -1,5 +1,6 @@
 package com.trebol.inventory.domain.api;
 
+import com.trebol.inventory.domain.model.Alert;
 import com.trebol.inventory.domain.model.Category;
 import com.trebol.inventory.domain.model.Product;
 import com.trebol.inventory.domain.model.ProductsCategory;
@@ -14,5 +15,6 @@ public interface IProductServicePort {
     void deleteProduct(String id);
     List<ProductsCategory> getAllProducts();
     String generateIdProduct(Category category);
+    List<Alert> getAllAlerts();
 
 }

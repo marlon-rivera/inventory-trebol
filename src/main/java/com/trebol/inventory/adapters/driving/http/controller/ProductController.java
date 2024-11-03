@@ -5,10 +5,7 @@ import com.trebol.inventory.adapters.driving.http.dto.request.CreateProduct;
 import com.trebol.inventory.adapters.driving.http.mapper.request.IProductRequestMapper;
 import com.trebol.inventory.configuration.exceptionhandler.ExceptionResponse;
 import com.trebol.inventory.domain.api.IProductServicePort;
-import com.trebol.inventory.domain.model.ProductsCategory;
-import com.trebol.inventory.domain.model.Brand;
-import com.trebol.inventory.domain.model.Category;
-import com.trebol.inventory.domain.model.UnitMeasure;
+import com.trebol.inventory.domain.model.*;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -89,5 +86,14 @@ public class ProductController {
     @GetMapping("/")
     public ResponseEntity<List<ProductsCategory>> getProductsByCategory() {
         return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @Operation(summary = "Obtiene una lista de alertas por minima cantidad, o fecha de expiracion")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de alertas")
+    })
+    @GetMapping("/alerts")
+    public ResponseEntity<List<Alert>> getAlerts(){
+        return ResponseEntity.ok(productService.getAllAlerts());
     }
 }

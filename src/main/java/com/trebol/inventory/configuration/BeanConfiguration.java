@@ -28,6 +28,8 @@ public class BeanConfiguration {
     private final IUnitMeasureEntityMapper unitMeasureEntityMapper;
     private final ISupplierRepository supplierRepository;
     private final ISupplierEntityMapper supplierEntityMapper;
+    private final IBatchRepository batchRepository;
+    private final IBatchEntityMapper batchEntityMapper;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -65,8 +67,13 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IBatchPersistencePort batchPersistencePort(){
+        return new BatchAdapter(batchRepository, batchEntityMapper, productEntityMapper );
+    }
+
+    @Bean
     public IProductServicePort productServicePort(Storage storage){
-        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort(), new FirebaseAdapter(storage));
+        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort(), new FirebaseAdapter(storage), batchPersistencePort());
     }
 
     @Bean

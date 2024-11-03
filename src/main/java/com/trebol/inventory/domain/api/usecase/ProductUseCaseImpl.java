@@ -5,13 +5,13 @@ import com.trebol.inventory.domain.exception.BrandNotExistsException;
 import com.trebol.inventory.domain.exception.CategoryNotExistsException;
 import com.trebol.inventory.domain.exception.ProductNotExistsException;
 import com.trebol.inventory.domain.exception.UnitMeasureNotExistsException;
-import com.trebol.inventory.domain.model.Category;
-import com.trebol.inventory.domain.model.Product;
-import com.trebol.inventory.domain.model.ProductsCategory;
+import com.trebol.inventory.domain.model.*;
 import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +25,7 @@ public class ProductUseCaseImpl implements IProductServicePort {
     private final IBrandPersistencePort brandPersistencePort;
     private final IUnitMeasurePersistencePort unitMeasurePersistencePort;
     private final IStorageImagePort storageImagePort;
+    private final IBatchPersistencePort batchPersistencePort;
 
     @Override
     public void createProduct(Product product, MultipartFile image) throws Exception {
@@ -36,8 +37,6 @@ public class ProductUseCaseImpl implements IProductServicePort {
         product.setActive(true);
         String productId = generateIdProduct(categoryOp.get());
         product.setId(productId);
-        System.out.println(product.getImage());
-        System.out.println(product.getImage().length());
         productPersistencePort.createProduct(product);
     }
 
@@ -65,10 +64,20 @@ public class ProductUseCaseImpl implements IProductServicePort {
                 .toList();
         List<ProductsCategory> productsCategories = new ArrayList<>();
         List<Product> productsByCategory = new ArrayList<>();
+
         for (Category category : categories) {
             for (Product product : products) {
                 if (category.getId().equals(product.getCategory().getId())) {
-                    productsByCategory.add(product);
+                    List<Batch> batches = batchPersistencePort.getBatchsByProduct(product);
+                    if(!batches.isEmpty()){
+                        for (Batch batch : batches) {
+                            Product productCopy = getAllProduct(product, batch);
+                            productsByCategory.add(productCopy);
+                        }
+                    }else{
+                        productsByCategory.add(product);
+                    }
+
                 }
             }
             productsCategories.add(new ProductsCategory(category, new ArrayList<>(productsByCategory)));
@@ -80,5 +89,44 @@ public class ProductUseCaseImpl implements IProductServicePort {
     @Override
     public String generateIdProduct(Category category) {
         return category.getName().toUpperCase().substring(0, 3) + productPersistencePort.countProductsByCategory(category.getId());
+    }
+
+    @Override
+    public List<Alert> getAllAlerts() {
+        List<Alert> alerts = new ArrayList<>();
+        List<Product> products = productPersistencePort.getAllProducts();
+        for (Product product : products) {
+            List<Batch> batches = batchPersistencePort.getBatchsByProduct(product);
+            int quantityAvailable = batches.stream().mapToInt(Batch::getQuantityAvalaible).sum();
+            if(quantityAvailable <= product.getMinStock()){
+                alerts.add(new Alert(product, TypeAlert.QUANTITY, quantityAvailable));
+            }
+            for (Batch batch : batches) {
+                long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), batch.getExpirationDate());
+                if(daysBetween <= 15){
+                    alerts.add(new Alert(product, TypeAlert.EXPIRATION, batch.getExpirationDate(), batch.getQuantityAvalaible()));
+                }
+            }
+        }
+        return alerts;
+    }
+
+    private Product getAllProduct(Product product, Batch batch) {
+        return new Product(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getImage(),
+                product.getMinStock(),
+                product.getMaxStock(),
+                product.getCategory(),
+                product.getBrand(),
+                product.getUnitMeasure(),
+                product.getMeasuredValue(),
+                batch.getQuantityAvalaible(),
+                batch.getId(),
+                batch.getExpirationDate(),
+                product.isActive()
+        );
     }
 }
