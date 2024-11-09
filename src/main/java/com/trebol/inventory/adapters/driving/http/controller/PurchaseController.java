@@ -30,7 +30,7 @@ public class PurchaseController {
     })
     @PostMapping("/")
     public ResponseEntity<Void> savePurchase(@RequestBody CreatePurchase createPurchase){
-        service.createPurchase(createPurchase.getSupplier(), createPurchase.getDetails());
+        service.createPurchase(createPurchase.getSupplier(), createPurchase.getDetails(), createPurchase.getPurchaseDate());
         return ResponseEntity.ok().build();
     }
 

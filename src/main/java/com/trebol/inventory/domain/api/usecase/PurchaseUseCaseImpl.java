@@ -23,10 +23,10 @@ public class PurchaseUseCaseImpl implements IPurchaseServicePort {
     private final IBatchPersistencePort batchPersistencePort;
 
     @Override
-    public void createPurchase(Supplier supplier, List<PurchaseDetail> detailList) {
+    public void createPurchase(Supplier supplier, List<PurchaseDetail> detailList, LocalDate purchaseDate) {
         String idCurrentUser = authenticationPort.getCurrentUsername();
         BigDecimal totalPurchase = BigDecimal.ZERO;
-        Purchase purchase = new Purchase(null, supplier, LocalDate.now(), null, idCurrentUser);
+        Purchase purchase = new Purchase(null, supplier, purchaseDate, null, idCurrentUser);
         for (PurchaseDetail detail : detailList) {
             if(productPersistencePort.getProductById(detail.getProduct().getId()).isEmpty()){
                 throw new ProductNotExistsException();
