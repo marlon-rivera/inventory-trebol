@@ -32,18 +32,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith(Constants.TOKEN_PREFIX)) {
             String token = authorizationHeader.substring(Constants.TOKEN_PREFIX.length());
             Claims claims = jwtService.getClaimsFromToken(token);
-            System.out.println("Token: " + token);
+
             String username = claims.getSubject();
-            System.out.println("Username: " + username);
+
             String roleStr = claims.get(Constants.ROLE, String.class);
-            System.out.println("Role: " + roleStr);
+
             Role role = Role.valueOf(roleStr);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     username, null, List.of(new SimpleGrantedAuthority(Constants.ROLE_ +  role.name())));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+
 
         }
         filterChain.doFilter(request, response);

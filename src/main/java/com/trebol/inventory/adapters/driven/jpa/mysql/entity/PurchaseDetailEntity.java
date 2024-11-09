@@ -33,28 +33,4 @@ public class PurchaseDetailEntity {
     @Column(nullable = false)
     private BigDecimal subtotal;
 
-
-}
-@Embeddable
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class PurchaseDetailId implements Serializable {
-
-    private Long purchaseId;
-    private String productId;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PurchaseDetailId that = (PurchaseDetailId) o;
-        return Objects.equals(purchaseId, that.purchaseId) &&
-                Objects.equals(productId, that.productId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(purchaseId, productId);
-    }
 }

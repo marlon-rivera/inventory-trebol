@@ -1,6 +1,7 @@
 package com.trebol.inventory.configuration;
 
 import com.google.cloud.storage.Storage;
+import com.trebol.inventory.adapters.driven.authentication.AuthenticationAdapter;
 import com.trebol.inventory.adapters.driven.firebase.FirebaseAdapter;
 import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.*;
@@ -30,6 +31,10 @@ public class BeanConfiguration {
     private final ISupplierEntityMapper supplierEntityMapper;
     private final IBatchRepository batchRepository;
     private final IBatchEntityMapper batchEntityMapper;
+    private final IPurchaseRepository purchaseRepository;
+    private final IPurchaseEntityMapper purchaseEntityMapper;
+    private final IPurchaseDetailRepository purchaseDetailRepository;
+    private final IPurchaseDetailEntityMapper purchaseDetailEntityMapper;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -94,5 +99,24 @@ public class BeanConfiguration {
     @Bean
     public ISupplierServicePort supplierServicePort() {
         return new SupplierUseCaseImpl(supplierPersistencePort());
+    }
+
+    @Bean
+    public IAuthenticationPort authenticationPort(){
+        return new AuthenticationAdapter();
+    }
+
+    @Bean
+    public IPurchaseDetailPersistencePort purchaseDetailPersistencePort(){
+        return new PurchaseDetailAdapter(purchaseDetailRepository, purchaseDetailEntityMapper);
+    }
+
+    @Bean
+    public IPurchasePersistencePort purchasePersistencePort(){
+        return new PurchaseAdapter(purchaseRepository, purchaseEntityMapper);
+    }
+
+    @Bean IPurchaseServicePort purchaseServicePort(){
+        return new PurchaseUseCaseImpl(authenticationPort(), productPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), batchPersistencePort());
     }
 }
