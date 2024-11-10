@@ -5,7 +5,6 @@ import com.trebol.inventory.domain.model.Batch;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

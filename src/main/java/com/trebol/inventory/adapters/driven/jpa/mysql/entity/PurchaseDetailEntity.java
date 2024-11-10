@@ -29,7 +29,7 @@ public class PurchaseDetailEntity {
     @Column(nullable = false)
     private Integer quantityPurchased;
     @Column(nullable = false)
-    private BigDecimal unitPrice;
+    private BigDecimal purchasePrice;
     @Column(nullable = false)
     private BigDecimal subtotal;
 

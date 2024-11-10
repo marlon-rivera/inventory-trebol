@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -15,5 +16,6 @@ public class Batch {
     private Product product;
     private LocalDate expirationDate;
     private Integer quantityAvalaible;
+    private BigDecimal unitPrice;
 
 }

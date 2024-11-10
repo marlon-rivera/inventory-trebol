@@ -15,6 +15,7 @@ public class PurchaseDetail {
     private Product product;
     private Integer quantityPurchased;
     private BigDecimal unitPrice;
+    private BigDecimal purchasePrice;
     private BigDecimal subtotal;
 
 }

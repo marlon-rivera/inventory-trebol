@@ -42,14 +42,14 @@ public class PurchaseUseCaseImpl implements IPurchaseServicePort {
         }
         purchaseDetailPersistencePort.savePurchaseDetails(detailList);
         for (PurchaseDetail detail : detailList) {
-            Batch batch = new Batch(null, detail.getProduct(), detail.getProduct().getExpirationDate(), detail.getQuantityPurchased());
+            Batch batch = new Batch(null, detail.getProduct(), detail.getProduct().getExpirationDate(), detail.getQuantityPurchased(), detail.getUnitPrice());
             batchPersistencePort.saveBatch(batch);
         }
     }
 
     private BigDecimal calculateSubtotal(PurchaseDetail detail) {
         BigDecimal subtotal = BigDecimal.ZERO;
-        subtotal = subtotal.add(detail.getUnitPrice().multiply(BigDecimal.valueOf(detail.getQuantityPurchased())));
+        subtotal = subtotal.add(detail.getPurchasePrice().multiply(BigDecimal.valueOf(detail.getQuantityPurchased())));
         return subtotal;
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name = "batch")
@@ -24,5 +25,7 @@ public class BatchEntity {
     private LocalDate expirationDate;
     @Column(nullable = false)
     private Integer quantityAvalaible;
+    @Column(nullable = false)
+    private BigDecimal unitPrice;
 
 }
