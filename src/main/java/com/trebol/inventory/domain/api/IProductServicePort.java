@@ -16,5 +16,6 @@ public interface IProductServicePort {
     List<ProductsCategory> getAllProducts();
     String generateIdProduct(Category category);
     List<Alert> getAllAlerts();
+    List<Product> getProducts();
 
 }

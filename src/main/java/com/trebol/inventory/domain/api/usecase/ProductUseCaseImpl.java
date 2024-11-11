@@ -111,6 +111,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
         return alerts;
     }
 
+    @Override
+    public List<Product> getProducts() {
+        return productPersistencePort.getAllProducts();
+    }
+
     private Product getAllProduct(Product product, Batch batch) {
         return new Product(
                 product.getId(),

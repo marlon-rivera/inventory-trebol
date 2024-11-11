@@ -88,6 +88,15 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
+    @Operation(summary = "Obtiene una lista de la base de los productos o los productos planos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de productos planos")
+    })
+    @GetMapping("/flat")
+    public ResponseEntity<List<Product>> getAllFlatProducts(){
+        return ResponseEntity.ok(productService.getProducts());
+    }
+
     @Operation(summary = "Obtiene una lista de alertas por minima cantidad, o fecha de expiracion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de alertas")
