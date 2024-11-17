@@ -12,9 +12,8 @@ import java.util.Optional;
 public interface IProductEntityMapper {
 
 
-    @Mapping(target = "quantityAvalaible", ignore = true)
     @Mapping(target = "expirationDate", ignore = true)
-    @Mapping(target = "batchId", ignore = true)
+    @Mapping(target = "totalAvailable", ignore = true)
     Product toProduct(ProductEntity source);
 
     ProductEntity toProductEntity(Product source);

@@ -1,10 +1,7 @@
 package com.trebol.inventory.domain.api.usecase;
 
 import com.trebol.inventory.domain.api.IProductServicePort;
-import com.trebol.inventory.domain.exception.BrandNotExistsException;
-import com.trebol.inventory.domain.exception.CategoryNotExistsException;
-import com.trebol.inventory.domain.exception.ProductNotExistsException;
-import com.trebol.inventory.domain.exception.UnitMeasureNotExistsException;
+import com.trebol.inventory.domain.exception.*;
 import com.trebol.inventory.domain.model.*;
 import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +23,15 @@ public class ProductUseCaseImpl implements IProductServicePort {
     private final IUnitMeasurePersistencePort unitMeasurePersistencePort;
     private final IStorageImagePort storageImagePort;
     private final IBatchPersistencePort batchPersistencePort;
+    private final ISupplierPersistencePort supplierPersistencePort;
 
     @Override
     public void createProduct(Product product, MultipartFile image) throws Exception {
+        for(Supplier supplier : product.getSuppliers()) {
+            if(supplierPersistencePort.getSupplierById(supplier.getId()).isEmpty()){
+                throw new SupplierNotExistsException();
+            }
+        }
         Optional<Category> categoryOp = categoryPersistencePort.getCategoryById(product.getCategory().getId());
         if(categoryOp.isEmpty()) throw new CategoryNotExistsException();
         if(brandPersistencePort.getBrandById(product.getBrand().getId()).isEmpty()) throw new BrandNotExistsException();
@@ -69,15 +72,9 @@ public class ProductUseCaseImpl implements IProductServicePort {
             for (Product product : products) {
                 if (category.getId().equals(product.getCategory().getId())) {
                     List<Batch> batches = batchPersistencePort.getBatchsByProduct(product);
-                    if(!batches.isEmpty()){
-                        for (Batch batch : batches) {
-                            Product productCopy = getAllProduct(product, batch);
-                            productsByCategory.add(productCopy);
-                        }
-                    }else{
-                        productsByCategory.add(product);
-                    }
-
+                    product.setBatches(batches);
+                    Product productCopy = getAllProduct(product, batches);
+                    productsByCategory.add(productCopy);
                 }
             }
             productsCategories.add(new ProductsCategory(category, new ArrayList<>(productsByCategory)));
@@ -116,7 +113,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
         return productPersistencePort.getAllProducts();
     }
 
-    private Product getAllProduct(Product product, Batch batch) {
+    private Product getAllProduct(Product product, List<Batch> batches) {
+        int totalAvailable = 0;
+        for (Batch batch : batches) {
+            totalAvailable += batch.getQuantityAvalaible();
+        }
         return new Product(
                 product.getId(),
                 product.getName(),
@@ -128,10 +129,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
                 product.getBrand(),
                 product.getUnitMeasure(),
                 product.getMeasuredValue(),
-                batch.getQuantityAvalaible(),
-                batch.getId(),
-                batch.getExpirationDate(),
-                product.isActive()
+                batches,
+                totalAvailable,
+                product.isActive(),
+                product.getSuppliers(),
+                product.getExpirationDate()
         );
     }
 }

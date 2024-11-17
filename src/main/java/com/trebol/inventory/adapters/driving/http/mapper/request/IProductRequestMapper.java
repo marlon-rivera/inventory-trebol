@@ -12,6 +12,7 @@ public interface IProductRequestMapper {
     @Mapping(target = "image", ignore = true)
     @Mapping(target = "unitMeasure", source = "createProduct.unitMeasure")
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "suppliers", source = "createProduct.suppliers")
     Product toProduct(CreateProduct createProduct);
 
 }

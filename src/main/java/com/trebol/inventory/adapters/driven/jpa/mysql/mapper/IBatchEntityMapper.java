@@ -10,8 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface IBatchEntityMapper {
 
-    @Mapping(target = "product.quantityAvalaible", ignore = true)
-    @Mapping(target = "product.batchId", ignore = true)
     @Mapping(target = "product.expirationDate", ignore = true)
     Batch toBatch(BatchEntity batchEntity);
 

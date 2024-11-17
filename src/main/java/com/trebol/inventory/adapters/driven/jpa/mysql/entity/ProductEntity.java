@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity(name = "product")
 @Data
 @AllArgsConstructor
@@ -39,4 +41,11 @@ public class ProductEntity {
     private String measuredValue;
     @Column(nullable = false)
     private boolean active;
+    @ManyToMany
+    @JoinTable(
+            name = "product_supplier",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id")
+    )
+    private List<SupplierEntity> suppliers;
 }

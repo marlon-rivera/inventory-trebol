@@ -78,7 +78,7 @@ public class BeanConfiguration {
 
     @Bean
     public IProductServicePort productServicePort(Storage storage){
-        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort(), new FirebaseAdapter(storage), batchPersistencePort());
+        return new ProductUseCaseImpl(productPersistencePort(), categoryPersistencePort(), brandPersistencePort(), unitMeasurePersistencePort(), new FirebaseAdapter(storage), batchPersistencePort(), supplierPersistencePort());
     }
 
     @Bean

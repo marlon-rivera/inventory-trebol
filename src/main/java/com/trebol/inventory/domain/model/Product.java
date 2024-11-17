@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -22,10 +23,11 @@ public class Product {
     private Brand brand;
     private UnitMeasure unitMeasure;
     private String measuredValue;
-    private int quantityAvalaible;
-    private Long batchId;
-    private LocalDate expirationDate;
+    private List<Batch> batches;
+    private int totalAvailable;
     private boolean active;
+    private List<Supplier> suppliers;
+    private LocalDate expirationDate;
 
     public Product createCopy(){
         return new Product(
@@ -39,10 +41,11 @@ public class Product {
                 this.brand,
                 this.unitMeasure,
                 this.measuredValue,
-                this.quantityAvalaible,
-                this.batchId,
-                this.expirationDate,
-                this.active
+                this.batches,
+                this.totalAvailable,
+                this.active,
+                this.suppliers,
+                this.expirationDate
         );
     }
 }

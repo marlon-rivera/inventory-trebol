@@ -4,9 +4,12 @@ import com.trebol.inventory.domain.model.TypeSupplier;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity(name = "supplier")
 @AllArgsConstructor
@@ -28,5 +31,7 @@ public class SupplierEntity {
     private TypeSupplier type;
     @Column(nullable = false)
     private boolean active;
+    @ManyToMany(mappedBy = "suppliers")
+    private List<ProductEntity> products;
 
 }

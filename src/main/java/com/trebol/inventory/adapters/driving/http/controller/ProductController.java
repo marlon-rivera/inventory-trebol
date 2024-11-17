@@ -1,5 +1,6 @@
 package com.trebol.inventory.adapters.driving.http.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trebol.inventory.adapters.driving.http.dto.request.CreateProduct;
 import com.trebol.inventory.adapters.driving.http.mapper.request.IProductRequestMapper;
@@ -8,7 +9,6 @@ import com.trebol.inventory.domain.api.IProductServicePort;
 import com.trebol.inventory.domain.model.*;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,12 +47,17 @@ public class ProductController {
             @RequestParam("category") String categoryId,
             @RequestParam("brand") String brandId,
             @RequestParam("unitMeasure") String unitMeasureId,
-            @RequestParam("measuredValue") String measuredValue) throws Exception {
+            @RequestParam("measuredValue") String measuredValue,
+            @RequestParam("suppliers") String suppliersIds) throws Exception {
 
 
         Category category = objectMapper.readValue(categoryId, Category.class);
         Brand brand = objectMapper.readValue(brandId, Brand.class);
         UnitMeasure unitMeasure = objectMapper.readValue(unitMeasureId, UnitMeasure.class);
+        List<Supplier> suppliers = objectMapper.readValue(suppliersIds, new TypeReference<List<Supplier>>() {});
+
+        suppliers.forEach(supplier -> System.out.println(supplier.getId()));
+
         CreateProduct createProduct = new CreateProduct(
                 name,
                 description,
@@ -61,7 +66,8 @@ public class ProductController {
                 category,
                 brand,
                 unitMeasure,
-                measuredValue
+                measuredValue,
+                suppliers
         );
         productService.createProduct(requestMapper.toProduct(createProduct), image);
         return ResponseEntity.status(HttpStatus.CREATED).build();
