@@ -1,9 +1,6 @@
 package com.trebol.inventory.domain.api;
 
-import com.trebol.inventory.domain.model.Alert;
-import com.trebol.inventory.domain.model.Category;
-import com.trebol.inventory.domain.model.Product;
-import com.trebol.inventory.domain.model.ProductsCategory;
+import com.trebol.inventory.domain.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,5 +14,6 @@ public interface IProductServicePort {
     String generateIdProduct(Category category);
     List<Alert> getAllAlerts();
     List<Product> getProducts();
+    List<ProductsSupplier> getProductsSuppliers();
 
 }

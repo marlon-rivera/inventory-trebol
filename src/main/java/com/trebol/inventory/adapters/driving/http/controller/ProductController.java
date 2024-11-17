@@ -111,4 +111,9 @@ public class ProductController {
     public ResponseEntity<List<Alert>> getAlerts(){
         return ResponseEntity.ok(productService.getAllAlerts());
     }
+
+    @GetMapping("/bySupplier")
+    public ResponseEntity<List<ProductsSupplier>> getProductsSupplier(){
+        return ResponseEntity.ok(productService.getProductsSuppliers());
+    }
 }

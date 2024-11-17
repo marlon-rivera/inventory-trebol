@@ -4,33 +4,34 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity(name = "purchase_detail")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class PurchaseDetailEntity {
 
-    @EmbeddedId
-    private PurchaseDetailId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("purchaseId")
     @JoinColumn(name = "purchase_id", nullable = false)
     private PurchaseEntity purchase;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("productId")
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
+
     @Column(nullable = false)
     private Integer quantityPurchased;
+
     @Column(nullable = false)
     private BigDecimal purchasePrice;
+
     @Column(nullable = false)
     private BigDecimal subtotal;
-
 }

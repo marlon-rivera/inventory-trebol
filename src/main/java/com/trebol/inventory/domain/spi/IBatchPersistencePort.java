@@ -8,6 +8,6 @@ import java.util.List;
 public interface IBatchPersistencePort {
 
     List<Batch> getBatchsByProduct(Product product);
-    void saveBatch(Batch batch);
+    Batch saveBatch(Batch batch);
 
 }

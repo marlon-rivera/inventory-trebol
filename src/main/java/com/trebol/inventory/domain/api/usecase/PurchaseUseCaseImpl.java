@@ -39,11 +39,9 @@ public class PurchaseUseCaseImpl implements IPurchaseServicePort {
         Purchase purchaseSaved = purchasePersistencePort.savePurchase(purchase);
         for (PurchaseDetail detail : detailList) {
             detail.setPurchase(purchaseSaved);
-        }
-        purchaseDetailPersistencePort.savePurchaseDetails(detailList);
-        for (PurchaseDetail detail : detailList) {
             Batch batch = new Batch(null, detail.getProduct(), detail.getProduct().getExpirationDate(), detail.getQuantityPurchased(), detail.getUnitPrice());
             batchPersistencePort.saveBatch(batch);
+            purchaseDetailPersistencePort.savePurchaseDetail(detail);
         }
     }
 

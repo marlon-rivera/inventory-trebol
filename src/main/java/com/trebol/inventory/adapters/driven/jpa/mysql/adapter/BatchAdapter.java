@@ -24,9 +24,8 @@ public class BatchAdapter implements IBatchPersistencePort {
     }
 
     @Override
-    public void saveBatch(Batch batch) {
+    public Batch saveBatch(Batch batch) {
         BatchEntity batchEntity = mapper.toBatchEntity(batch);
-        System.out.println(batchEntity);
-        repository.save(batchEntity);
+        return mapper.toBatch(repository.save(batchEntity));
     }
 }
