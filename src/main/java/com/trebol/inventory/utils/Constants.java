@@ -18,5 +18,8 @@ public class Constants {
     public static final String UNIT_MEASURE_NOT_EXISTS = "La unidad de medida solicitada no existe.";
     public static final String SUPPLIER_ALREADY_EXISTS = "El proveedor que desea guardar ya existe.";
     public static final String SUPPLIER_NOT_EXISTS = "El proveedor que se requiere no existe.";
+    public static final String CLIENT_NOT_EXISTS = "El cliente que se requiere no existe.";
+    public static final String BATCH_NOT_EXISTS = "El lote que re quiere del producto, no existe: ";
+    public static final String QUANTITY_INSUFFICIENT = "La cantidad requerida del producto no esta disponible: ";
 
 }

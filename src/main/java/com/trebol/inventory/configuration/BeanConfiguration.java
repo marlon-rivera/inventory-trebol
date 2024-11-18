@@ -35,6 +35,10 @@ public class BeanConfiguration {
     private final IPurchaseEntityMapper purchaseEntityMapper;
     private final IPurchaseDetailRepository purchaseDetailRepository;
     private final IPurchaseDetailEntityMapper purchaseDetailEntityMapper;
+    private final ISaleDetailRepository saleDetailRepository;
+    private final ISaleDetailEntityMapper saleDetailEntityMapper;
+    private final ISaleRepository saleRepository;
+    private final ISaleEntityMapper saleEntityMapper;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -116,7 +120,23 @@ public class BeanConfiguration {
         return new PurchaseAdapter(purchaseRepository, purchaseEntityMapper);
     }
 
-    @Bean IPurchaseServicePort purchaseServicePort(){
+    @Bean
+    public IPurchaseServicePort purchaseServicePort(){
         return new PurchaseUseCaseImpl(authenticationPort(), productPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), batchPersistencePort());
+    }
+
+    @Bean
+    public ISaleDetailPersistencePort saleDetailPersistencePort(){
+        return new SaleDetailAdapter(saleDetailRepository, saleDetailEntityMapper);
+    }
+
+    @Bean
+    public ISalePersistencePort salePersistencePort(){
+        return new SaleAdapter(saleRepository, saleEntityMapper);
+    }
+
+    @Bean
+    public ISaleServicePort saleServicePort(){
+        return new SaleUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), batchPersistencePort(), authenticationPort(), productPersistencePort(), clientPersistencePort());
     }
 }

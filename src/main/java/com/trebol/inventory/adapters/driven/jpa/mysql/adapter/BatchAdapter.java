@@ -10,6 +10,7 @@ import com.trebol.inventory.domain.spi.IBatchPersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class BatchAdapter implements IBatchPersistencePort {
@@ -27,5 +28,10 @@ public class BatchAdapter implements IBatchPersistencePort {
     public Batch saveBatch(Batch batch) {
         BatchEntity batchEntity = mapper.toBatchEntity(batch);
         return mapper.toBatch(repository.save(batchEntity));
+    }
+
+    @Override
+    public Optional<Batch> getBatchById(Long id) {
+        return mapper.toOptionalBatch(repository.findById(id));
     }
 }

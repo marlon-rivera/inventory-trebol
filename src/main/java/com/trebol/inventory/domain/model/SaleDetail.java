@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class SaleDetail {
 
     private Sale sale;
+    private Batch batch;
     private Product product;
     private Integer quantitySold;
     private BigDecimal unitPrice;

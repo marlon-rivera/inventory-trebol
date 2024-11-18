@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Sale {
 
     private Long id;
-    private String idClient;
+    private Client client;
     private LocalDate date;
     private BigDecimal totalPrice;
     private String idInCharge;
