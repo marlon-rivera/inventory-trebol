@@ -110,7 +110,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
 
     @Override
     public List<Product> getProducts() {
-        return productPersistencePort.getAllProducts();
+        List<Product> products = productPersistencePort.getAllProducts();
+        for (Product product: products){
+            product.setBatches(batchPersistencePort.getBatchsByProduct(product));
+        }
+        return products;
     }
 
     @Override
