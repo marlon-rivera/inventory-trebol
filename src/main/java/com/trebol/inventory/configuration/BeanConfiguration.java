@@ -2,6 +2,8 @@ package com.trebol.inventory.configuration;
 
 import com.google.cloud.storage.Storage;
 import com.trebol.inventory.adapters.driven.authentication.AuthenticationAdapter;
+import com.trebol.inventory.adapters.driven.feign.EmployeeFeignAdapter;
+import com.trebol.inventory.adapters.driven.feign.IEmployeeFeignClient;
 import com.trebol.inventory.adapters.driven.firebase.FirebaseAdapter;
 import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.*;
@@ -39,6 +41,7 @@ public class BeanConfiguration {
     private final ISaleDetailEntityMapper saleDetailEntityMapper;
     private final ISaleRepository saleRepository;
     private final ISaleEntityMapper saleEntityMapper;
+    private final IEmployeeFeignClient employeeFeignClient;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -138,5 +141,15 @@ public class BeanConfiguration {
     @Bean
     public ISaleServicePort saleServicePort(){
         return new SaleUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), batchPersistencePort(), authenticationPort(), productPersistencePort(), clientPersistencePort());
+    }
+
+    @Bean
+    public IEmployeeClient employeeClient(){
+        return new EmployeeFeignAdapter(employeeFeignClient);
+    }
+
+    @Bean
+    public ITransactionServicePort transactionServicePort(){
+        return new TransactionUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), employeeClient());
     }
 }

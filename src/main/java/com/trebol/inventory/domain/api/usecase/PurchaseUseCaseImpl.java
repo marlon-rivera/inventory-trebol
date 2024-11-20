@@ -26,7 +26,7 @@ public class PurchaseUseCaseImpl implements IPurchaseServicePort {
     public void createPurchase(Supplier supplier, List<PurchaseDetail> detailList, LocalDate purchaseDate) {
         String idCurrentUser = authenticationPort.getCurrentUsername();
         BigDecimal totalPurchase = BigDecimal.ZERO;
-        Purchase purchase = new Purchase(null, supplier, purchaseDate, null, idCurrentUser);
+        Purchase purchase = new Purchase(null, supplier, purchaseDate, null, idCurrentUser, null, null, null);
         for (PurchaseDetail detail : detailList) {
             if(productPersistencePort.getProductById(detail.getProduct().getId()).isEmpty()){
                 throw new ProductNotExistsException();

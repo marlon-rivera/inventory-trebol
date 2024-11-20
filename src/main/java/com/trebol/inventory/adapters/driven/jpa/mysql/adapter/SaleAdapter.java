@@ -6,6 +6,8 @@ import com.trebol.inventory.domain.model.Sale;
 import com.trebol.inventory.domain.spi.ISalePersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class SaleAdapter implements ISalePersistencePort {
 
@@ -15,5 +17,10 @@ public class SaleAdapter implements ISalePersistencePort {
     @Override
     public Sale saveSale(Sale sale) {
         return mapper.toSale(repository.save(mapper.toSaleEntity(sale)));
+    }
+
+    @Override
+    public List<Sale> getSales() {
+        return mapper.toSales(repository.findAll());
     }
 }

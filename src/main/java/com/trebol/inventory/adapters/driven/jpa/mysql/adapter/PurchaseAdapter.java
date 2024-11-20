@@ -6,6 +6,8 @@ import com.trebol.inventory.domain.model.Purchase;
 import com.trebol.inventory.domain.spi.IPurchasePersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class PurchaseAdapter implements IPurchasePersistencePort {
 
@@ -15,5 +17,10 @@ public class PurchaseAdapter implements IPurchasePersistencePort {
     @Override
     public Purchase savePurchase(Purchase purchase) {
         return mapper.toPurchase(repository.save(mapper.toPurchaseEntity(purchase)));
+    }
+
+    @Override
+    public List<Purchase> getPurchases() {
+        return mapper.toPurchases(repository.findAll());
     }
 }
