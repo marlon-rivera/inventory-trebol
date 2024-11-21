@@ -17,6 +17,8 @@ public class Sale implements DateSortable{
     private Client client;
     private LocalDate date;
     private BigDecimal totalPrice;
+    private BigDecimal grossPrice;
+    private BigDecimal iva;
     private String idInCharge;
     private List<SaleDetail> details;
     private TypeTransaction typeTransaction;

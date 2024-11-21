@@ -19,7 +19,7 @@ public class SaleController {
 
     @PostMapping("/")
     public ResponseEntity<Void> saveSale(@Valid @RequestBody CreateSale createSale){
-        servicePort.saveSale(createSale.getDetails(), createSale.getClient());
+        servicePort.saveSale(createSale.getDetails(), createSale.getClient(), createSale.getTypeInvoice(), createSale.getSaleDate());
         return ResponseEntity.noContent().build();
     }
 

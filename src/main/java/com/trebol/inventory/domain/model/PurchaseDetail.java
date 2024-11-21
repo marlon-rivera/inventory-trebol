@@ -13,6 +13,7 @@ public class PurchaseDetail {
 
     private Purchase purchase;
     private Product product;
+    private Batch batch;
     private Integer quantityPurchased;
     private BigDecimal unitPrice;
     private BigDecimal purchasePrice;

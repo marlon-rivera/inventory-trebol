@@ -26,5 +26,9 @@ public class SaleEntity {
     private BigDecimal totalPrice;
     @Column(nullable = false)
     private String idInCharge;
+    @Column(nullable = false)
+    private BigDecimal grossPrice;
+    @Column(nullable = false)
+    private BigDecimal iva;
 
 }

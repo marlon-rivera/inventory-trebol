@@ -26,6 +26,10 @@ public class PurchaseDetailEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "batch_id", nullable = false)
+    private BatchEntity batch;
+
     @Column(nullable = false)
     private Integer quantityPurchased;
 
