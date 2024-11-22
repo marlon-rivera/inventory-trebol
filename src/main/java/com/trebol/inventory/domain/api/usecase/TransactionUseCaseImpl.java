@@ -43,6 +43,7 @@ public class TransactionUseCaseImpl implements ITransactionServicePort {
             transactions.add(purchase);
         }
         transactions.sort(Comparator.comparing(DateSortable::getDate));
+        Collections.reverse(transactions);
         return transactions;
     }
 }

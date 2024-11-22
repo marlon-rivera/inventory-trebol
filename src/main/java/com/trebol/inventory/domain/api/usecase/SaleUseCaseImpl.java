@@ -78,7 +78,7 @@ public class SaleUseCaseImpl implements ISaleServicePort {
         }else if(typeInvoice.equals(TypeInvoice.PHYSICAL)){
             return pdfPort.generateInvoicePdf(saleSaved, details);
         }
-        return null;
+        return new Invoice("", null);
     }
 
     private BigDecimal calculateSubtotalGross(SaleDetail saleDetail) {

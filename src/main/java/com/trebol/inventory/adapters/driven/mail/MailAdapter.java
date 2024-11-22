@@ -30,14 +30,14 @@ public class MailAdapter implements IMailPort {
                 <style>
                     body { font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0; }
                     .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f7f7f7; border: 1px solid #ddd; }
-                    h2 { text-align: center; color: #9D3FE7; }
+                    h2 { text-align: center; color: #1f5d11; }
                     .emitter-info, .customer-info, .total { margin-bottom: 20px; font-size: 0.9em; }
                     .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
                     .items-table th, .items-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-                    .items-table th { background-color: #9D3FE7; color: white; }
+                    .items-table th { background-color: #1f5d11; color: white; }
                     .text-right { text-align: right; }
                     .total-amount { font-size: 1.2em; font-weight: bold; }
-                    .highlight { color: #9D3FE7; }
+                    .highlight { color: #1f5d11; }
                     .footer-info { font-size: 0.8em; color: #555; margin-top: 20px; text-align: center; }
                 </style>
             </head>
