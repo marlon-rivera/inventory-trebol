@@ -1,5 +1,7 @@
 package com.trebol.inventory.utils;
 
+import java.math.BigDecimal;
+
 public class Constants {
 
     private Constants() { }
@@ -21,6 +23,6 @@ public class Constants {
     public static final String CLIENT_NOT_EXISTS = "El cliente que se requiere no existe.";
     public static final String BATCH_NOT_EXISTS = "El lote que requiere del producto, no existe: ";
     public static final String QUANTITY_INSUFFICIENT = "La cantidad requerida del producto no esta disponible: ";
-    public static final double PERCENTAGE_IVA = 0.19;
+    public static final BigDecimal PERCENTAGE_IVA = BigDecimal.valueOf(0.19);
 
 }

@@ -23,15 +23,18 @@ public class SaleUseCaseImpl implements ISaleServicePort {
     private final IAuthenticationPort authenticationPort;
     private final IProductPersistencePort productPersistencePort;
     private final IClientPersistencePort clientPersistencePort;
-   // private final IMailPort mailPort;
-
+    private final IMailPort mailPort;
+    private final IPdfPort pdfPort;
 
     @Override
-    public void saveSale(List<SaleDetail> details, Client client, TypeInvoice typeInvoice, LocalDate date) {
-        if(clientPersistencePort.getClientById(client.getId()).isEmpty()){
+    public Invoice saveSale(List<SaleDetail> details, Client client, TypeInvoice typeInvoice, LocalDate date) {
+        Optional<Client> clientOp = clientPersistencePort.getClientById(client.getId());
+        if(clientOp.isEmpty()){
             throw new ClientNotExistsException();
         }
+        Client clientFind = clientOp.get();
         Sale sale = new Sale();
+        sale.setClient(clientFind);
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal totalGross = BigDecimal.ZERO;
         for (SaleDetail detail : details) {
@@ -45,8 +48,9 @@ public class SaleUseCaseImpl implements ISaleServicePort {
             }
             batch.setQuantityAvalaible(batch.getQuantityAvalaible() - detail.getQuantitySold());
 
-            detail.setIvaPrice(batch.getUnitPrice().multiply(BigDecimal.valueOf(Constants.PERCENTAGE_IVA)));
-            detail.setUnitPrice(batch.getUnitPrice());
+
+            detail.setUnitPrice(batch.getUnitPrice().subtract(batch.getUnitPrice().multiply(Constants.PERCENTAGE_IVA)));
+            detail.setIvaPrice(batch.getUnitPrice().multiply(Constants.PERCENTAGE_IVA));
             detail.setProduct(batch.getProduct());
             detail.setBatch(batch);
 
@@ -61,7 +65,6 @@ public class SaleUseCaseImpl implements ISaleServicePort {
         sale.setGrossPrice(totalGross);
         sale.setDate(date);
         sale.setIva(calculateTotalIva(details));
-        sale.setClient(client);
         String idInCharge = authenticationPort.getCurrentUsername();
         sale.setIdInCharge(idInCharge);
         Sale saleSaved = salePersistencePort.saveSale(sale);
@@ -71,10 +74,11 @@ public class SaleUseCaseImpl implements ISaleServicePort {
         }
 
         if(typeInvoice.equals(TypeInvoice.ELECTRONIC)){
-            //mailPort.sendInvoice(client.getEmail(), details, saleSaved);
+            mailPort.sendInvoice(clientFind.getEmail(), details, saleSaved);
         }else if(typeInvoice.equals(TypeInvoice.PHYSICAL)){
-
+            return pdfPort.generateInvoicePdf(saleSaved, details);
         }
+        return null;
     }
 
     private BigDecimal calculateSubtotalGross(SaleDetail saleDetail) {
@@ -84,9 +88,6 @@ public class SaleUseCaseImpl implements ISaleServicePort {
                         saleDetail
                                 .getUnitPrice()
                                 .multiply(BigDecimal.valueOf(saleDetail.getQuantitySold())));
-        System.out.println(saleDetail.getUnitPrice());
-        System.out.println(saleDetail.getQuantitySold());
-        System.out.println(subtotal);
         return subtotal;
     }
 
@@ -105,7 +106,7 @@ public class SaleUseCaseImpl implements ISaleServicePort {
     private BigDecimal calculateTotalIva(List<SaleDetail> details){
         BigDecimal total = BigDecimal.ZERO;
         for (SaleDetail detail : details) {
-            total = total.add(detail.getIvaPrice());
+            total = total.add(detail.getIvaPrice().multiply(BigDecimal.valueOf(detail.getQuantitySold())));
         }
         return total;
     }

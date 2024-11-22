@@ -8,12 +8,15 @@ import com.trebol.inventory.adapters.driven.firebase.FirebaseAdapter;
 import com.trebol.inventory.adapters.driven.jpa.mysql.adapter.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.*;
 import com.trebol.inventory.adapters.driven.jpa.mysql.repository.*;
+import com.trebol.inventory.adapters.driven.mail.MailAdapter;
+import com.trebol.inventory.adapters.driven.pdf.PdfGeneratorAdapter;
 import com.trebol.inventory.domain.api.*;
 import com.trebol.inventory.domain.api.usecase.*;
 import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,6 +45,7 @@ public class BeanConfiguration {
     private final ISaleRepository saleRepository;
     private final ISaleEntityMapper saleEntityMapper;
     private final IEmployeeFeignClient employeeFeignClient;
+    private final JavaMailSender mailSender;
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
@@ -139,8 +143,18 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IMailPort mailPort(){
+        return new MailAdapter(mailSender);
+    }
+
+    @Bean
+    public IPdfPort pdfPort(){
+        return new PdfGeneratorAdapter();
+    }
+
+    @Bean
     public ISaleServicePort saleServicePort(){
-        return new SaleUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), batchPersistencePort(), authenticationPort(), productPersistencePort(), clientPersistencePort());
+        return new SaleUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), batchPersistencePort(), authenticationPort(), productPersistencePort(), clientPersistencePort(), mailPort(), pdfPort());
     }
 
     @Bean

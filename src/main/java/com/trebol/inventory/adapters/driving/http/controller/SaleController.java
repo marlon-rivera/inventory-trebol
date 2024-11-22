@@ -2,6 +2,7 @@ package com.trebol.inventory.adapters.driving.http.controller;
 
 import com.trebol.inventory.adapters.driving.http.dto.request.CreateSale;
 import com.trebol.inventory.domain.api.ISaleServicePort;
+import com.trebol.inventory.domain.model.Invoice;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,8 @@ public class SaleController {
     private final ISaleServicePort servicePort;
 
     @PostMapping("/")
-    public ResponseEntity<Void> saveSale(@Valid @RequestBody CreateSale createSale){
-        servicePort.saveSale(createSale.getDetails(), createSale.getClient(), createSale.getTypeInvoice(), createSale.getSaleDate());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Invoice> saveSale(@Valid @RequestBody CreateSale createSale){
+        return ResponseEntity.ok(servicePort.saveSale(createSale.getDetails(), createSale.getClient(), createSale.getTypeInvoice(), createSale.getSaleDate()));
     }
 
 }
