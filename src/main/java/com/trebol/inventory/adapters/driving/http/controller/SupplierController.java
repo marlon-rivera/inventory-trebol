@@ -77,7 +77,7 @@ public class SupplierController {
 
     @GetMapping("/prueba")
     public String test(){
-        return "Funciona";
+        return "Funciona otra prueba";
     }
 
 }
