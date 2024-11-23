@@ -3,6 +3,7 @@ package com.trebol.inventory.configuration.jwt;
 import com.trebol.inventory.domain.model.Role;
 import com.trebol.inventory.utils.Constants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith(Constants.TOKEN_PREFIX)) {
             String token = authorizationHeader.substring(Constants.TOKEN_PREFIX.length());
-            Claims claims = jwtService.getClaimsFromToken(token);
+            Claims claims = null;
+            try {
+                claims = jwtService.getClaimsFromToken(token);
+            }catch (ExpiredJwtException ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                filterChain.doFilter(request, response);
+                return;
+            }
+
 
             String username = claims.getSubject();
 

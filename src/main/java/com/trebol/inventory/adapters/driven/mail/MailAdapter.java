@@ -43,7 +43,10 @@ public class MailAdapter implements IMailPort {
             </head>
             <body>
             <div class="container">
-                <h2>Factura Electrónica</h2>
+                <div class="info-container">
+                    <img src='https://firebasestorage.googleapis.com/v0/b/trebol-3c95d.appspot.com/o/logo.png?alt=media&token=afae3435-ed69-4ee9-87ce-834d664e6b2d' alt='Logo Trebol' style='width: 50px; height: auto;' >
+                    <h2>Factura Electrónica</h2>
+                </div>
                 <div class="emitter-info">
                     <p><strong>Comercio:</strong> Trebol PET.</p>
                     <p><strong>NIT:</strong> 123456789-0</p>

@@ -75,9 +75,4 @@ public class SupplierController {
         return ResponseEntity.ok(suppliers);
     }
 
-    @GetMapping("/prueba")
-    public String test(){
-        return "Funciona otra prueba 1";
-    }
-
 }

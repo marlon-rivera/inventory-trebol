@@ -1,5 +1,6 @@
 package com.trebol.inventory.configuration.exceptionhandler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
