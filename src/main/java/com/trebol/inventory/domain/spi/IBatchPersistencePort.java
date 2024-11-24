@@ -11,5 +11,6 @@ public interface IBatchPersistencePort {
     List<Batch> getBatchsByProduct(Product product);
     Batch saveBatch(Batch batch);
     Optional<Batch> getBatchById(Long id);
+    void saveAll(List<Batch> batches);
 
 }

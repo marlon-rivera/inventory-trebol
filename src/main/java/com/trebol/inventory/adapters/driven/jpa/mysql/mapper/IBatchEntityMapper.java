@@ -18,6 +18,8 @@ public interface IBatchEntityMapper {
 
     List<Batch> toBatches(List<BatchEntity> batchEntities);
 
+    List<BatchEntity> toBatchEntities(List<Batch> batches);
+
     default Optional<Batch> toOptionalBatch(Optional<BatchEntity> batchEntityOp){
         return batchEntityOp.map(this::toBatch);
     }

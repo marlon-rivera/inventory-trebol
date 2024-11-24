@@ -21,7 +21,7 @@ public class BatchAdapter implements IBatchPersistencePort {
 
     @Override
     public List<Batch> getBatchsByProduct(Product product) {
-        return mapper.toBatches(repository.findAllByProduct(productMapper.toProductEntity(product)));
+        return mapper.toBatches(repository.findAllByProductAndQuantityAvalaibleGreaterThan(productMapper.toProductEntity(product), 0));
     }
 
     @Override
@@ -33,5 +33,11 @@ public class BatchAdapter implements IBatchPersistencePort {
     @Override
     public Optional<Batch> getBatchById(Long id) {
         return mapper.toOptionalBatch(repository.findById(id));
+    }
+
+    @Override
+    public void saveAll(List<Batch> batches) {
+        List<BatchEntity> batchEntities = mapper.toBatchEntities(batches);
+        repository.saveAll(batchEntities);
     }
 }

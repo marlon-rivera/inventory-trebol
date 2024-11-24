@@ -7,6 +7,7 @@ import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -44,7 +45,36 @@ public class ProductUseCaseImpl implements IProductServicePort {
     }
 
     @Override
-    public void updateProduct(Product product) {
+    public void updateProduct(Product productUpdate, BigDecimal newPrice) {
+        Optional<Product> productOptional = productPersistencePort.getProductById(productUpdate.getId());
+        if (productOptional.isEmpty()) throw new ProductNotExistsException();
+        Product product = productOptional.get();
+        if(!product.getDescription().equals(productUpdate.getDescription()) && productUpdate.getDescription() != null) {
+            product.setDescription(productUpdate.getDescription());
+        }
+        if(!product.getMinStock().equals(productUpdate.getMinStock())  && productUpdate.getMinStock() != null) {
+            product.setMinStock(productUpdate.getMinStock());
+        }
+        if(!product.getMaxStock().equals(productUpdate.getMaxStock())  && productUpdate.getMaxStock() != null) {
+            product.setMaxStock(productUpdate.getMaxStock());
+        }
+        if(!product.getSuppliers().equals(productUpdate.getSuppliers()) && productUpdate.getSuppliers() != null) {
+            for (Supplier supplier : productUpdate.getSuppliers()) {
+                if(supplierPersistencePort.getSupplierById(supplier.getId()).isEmpty()){
+                    throw new SupplierNotExistsException();
+                }
+            }
+            product.setSuppliers(productUpdate.getSuppliers());
+        }
+        if(newPrice != null) {
+            List<Batch> batches = batchPersistencePort.getBatchsByProduct(product);
+            for(Batch batch : batches) {
+                batch.setUnitPrice(newPrice);
+            }
+            batchPersistencePort.saveAll(batches);
+        }
+
+
         productPersistencePort.updateProduct(product);
     }
 

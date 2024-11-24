@@ -3,6 +3,7 @@ package com.trebol.inventory.adapters.driving.http.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trebol.inventory.adapters.driving.http.dto.request.CreateProduct;
+import com.trebol.inventory.adapters.driving.http.dto.request.UpdateProduct;
 import com.trebol.inventory.adapters.driving.http.mapper.request.IProductRequestMapper;
 import com.trebol.inventory.configuration.exceptionhandler.ExceptionResponse;
 import com.trebol.inventory.domain.api.IProductServicePort;
@@ -115,5 +116,21 @@ public class ProductController {
     @GetMapping("/bySupplier")
     public ResponseEntity<List<ProductsSupplier>> getProductsSupplier(){
         return ResponseEntity.ok(productService.getProductsSuppliers());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateProduct(@PathVariable String id, @RequestBody UpdateProduct updateProduct) {
+        Product product = new Product();
+        product.setId(id);
+        product.setSuppliers(updateProduct.getSuppliers());
+        product.setDescription(updateProduct.getDescription());
+        if(updateProduct.getMinStock() != null) {
+            product.setMinStock(updateProduct.getMinStock().intValue());
+        }
+        if(updateProduct.getMaxStock() != null) {
+            product.setMaxStock(updateProduct.getMaxStock().intValue());
+        }
+        productService.updateProduct(product, updateProduct.getUnitPrice());
+        return ResponseEntity.noContent().build();
     }
 }

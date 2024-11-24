@@ -11,7 +11,7 @@ public interface IProductRepository extends JpaRepository<ProductEntity, String>
 
     List<ProductEntity> findByActiveTrue();
     Integer countByCategoryId(Long id);
-    @Query("SELECT p FROM product p JOIN p.suppliers s WHERE s.id = :supplierId")
+    @Query("SELECT p FROM product p JOIN p.suppliers s WHERE s.id = :supplierId and p.active = true")
     List<ProductEntity> findProductEntitiesBySupplierId(@Param("supplierId") String supplierId);
 
 }

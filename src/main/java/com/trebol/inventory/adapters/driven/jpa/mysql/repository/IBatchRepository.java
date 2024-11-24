@@ -10,4 +10,6 @@ public interface IBatchRepository extends JpaRepository<BatchEntity, Long> {
 
     List<BatchEntity> findAllByProduct(ProductEntity product);
 
+    List<BatchEntity> findAllByProductAndQuantityAvalaibleGreaterThan(ProductEntity product, Integer quantityAvalaible);
+
 }
