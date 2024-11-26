@@ -3,7 +3,6 @@ package com.trebol.inventory.adapters.driven.jpa.mysql.adapter;
 import com.trebol.inventory.adapters.driven.jpa.mysql.mapper.IProductEntityMapper;
 import com.trebol.inventory.adapters.driven.jpa.mysql.repository.IProductRepository;
 import com.trebol.inventory.domain.model.Product;
-import com.trebol.inventory.domain.model.Supplier;
 import com.trebol.inventory.domain.spi.IProductPersistencePort;
 import lombok.RequiredArgsConstructor;
 

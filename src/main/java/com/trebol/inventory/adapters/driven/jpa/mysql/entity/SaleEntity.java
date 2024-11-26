@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "sales")
 @AllArgsConstructor
@@ -30,5 +32,11 @@ public class SaleEntity {
     private BigDecimal grossPrice;
     @Column(nullable = false)
     private BigDecimal iva;
+    @OneToMany(
+            mappedBy = "sale",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<SaleDetailEntity> details = new HashSet<>();
 
 }

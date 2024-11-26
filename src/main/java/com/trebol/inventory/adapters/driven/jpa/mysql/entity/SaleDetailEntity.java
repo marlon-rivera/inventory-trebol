@@ -1,7 +1,5 @@
 package com.trebol.inventory.adapters.driven.jpa.mysql.entity;
 
-import com.trebol.inventory.domain.model.Product;
-import com.trebol.inventory.domain.model.Sale;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

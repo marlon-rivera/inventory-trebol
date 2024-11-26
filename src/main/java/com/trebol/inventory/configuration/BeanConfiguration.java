@@ -164,6 +164,6 @@ public class BeanConfiguration {
 
     @Bean
     public ITransactionServicePort transactionServicePort(){
-        return new TransactionUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), employeeClient());
+        return new TransactionUseCaseImpl(salePersistencePort(), saleDetailPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), employeeClient(), productPersistencePort(), batchPersistencePort(), pdfPort());
     }
 }

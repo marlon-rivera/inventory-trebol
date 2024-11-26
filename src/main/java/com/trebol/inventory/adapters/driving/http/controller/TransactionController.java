@@ -2,11 +2,10 @@ package com.trebol.inventory.adapters.driving.http.controller;
 
 import com.trebol.inventory.domain.api.ITransactionServicePort;
 import com.trebol.inventory.domain.model.DateSortable;
+import com.trebol.inventory.domain.model.ReportType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +19,11 @@ public class TransactionController {
     @GetMapping("/")
     public ResponseEntity<List<DateSortable>> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getTransactions());
+    }
+
+    @GetMapping("/{reportType}")
+    public ResponseEntity<byte[]> getReport(@PathVariable ReportType reportType) {
+        return ResponseEntity.ok(transactionService.generateReport(reportType));
     }
 
 }

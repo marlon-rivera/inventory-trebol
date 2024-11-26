@@ -1,7 +1,6 @@
 package com.trebol.inventory.domain.spi;
 
 import com.trebol.inventory.domain.model.Product;
-import com.trebol.inventory.domain.model.Supplier;
 
 import java.util.List;
 import java.util.Optional;

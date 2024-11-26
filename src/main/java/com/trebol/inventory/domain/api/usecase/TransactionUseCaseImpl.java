@@ -18,6 +18,9 @@ public class TransactionUseCaseImpl implements ITransactionServicePort {
     private final IPurchasePersistencePort purchasePersistencePort;
     private final IPurchaseDetailPersistencePort purchaseDetailPersistencePort;
     private final IEmployeeClient employeeClient;
+    private final IProductPersistencePort productPersistencePort;
+    private final IBatchPersistencePort batchPersistencePort;
+    private final IPdfPort pdfPort;
 
     @Override
     public List<DateSortable> getTransactions() {
@@ -45,5 +48,21 @@ public class TransactionUseCaseImpl implements ITransactionServicePort {
         transactions.sort(Comparator.comparing(DateSortable::getDate));
         Collections.reverse(transactions);
         return transactions;
+    }
+
+    @Override
+    public byte[] generateReport(ReportType type) {
+        if(type.equals(ReportType.CURRENT_INVENTORY)){
+            generateReportCurrentInventory();
+        }
+        return new byte[0];
+    }
+
+    private byte[] generateReportCurrentInventory(){
+        List<Product> products = productPersistencePort.getAllProducts();
+        for(Product product: products){
+            product.setBatches(batchPersistencePort.getBatchsByProduct(product));
+        }
+        return pdfPort.generateReportCurrentInventory(products);
     }
 }

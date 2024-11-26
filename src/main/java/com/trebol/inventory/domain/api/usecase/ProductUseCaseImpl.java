@@ -129,9 +129,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
                 alerts.add(new Alert(product, TypeAlert.QUANTITY, quantityAvailable));
             }
             for (Batch batch : batches) {
-                long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), batch.getExpirationDate());
-                if(daysBetween <= 15){
-                    alerts.add(new Alert(product, TypeAlert.EXPIRATION, batch.getExpirationDate(), batch.getQuantityAvalaible()));
+                if(batch.getExpirationDate() != null){
+                    long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), batch.getExpirationDate());
+                    if(daysBetween <= 15){
+                        alerts.add(new Alert(product, TypeAlert.EXPIRATION, batch.getExpirationDate(), batch.getQuantityAvalaible()));
+                    }
                 }
             }
         }

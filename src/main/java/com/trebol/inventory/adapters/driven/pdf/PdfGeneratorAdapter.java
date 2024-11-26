@@ -1,13 +1,12 @@
 package com.trebol.inventory.adapters.driven.pdf;
 
-import com.trebol.inventory.domain.model.Invoice;
-import com.trebol.inventory.domain.model.Sale;
-import com.trebol.inventory.domain.model.SaleDetail;
+import com.trebol.inventory.domain.model.*;
 import com.trebol.inventory.domain.spi.IPdfPort;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PdfGeneratorAdapter implements IPdfPort {
@@ -102,6 +101,115 @@ public class PdfGeneratorAdapter implements IPdfPort {
             renderer.layout();
             renderer.createPDF(byteArrayOutputStream);
             return new Invoice(pdfPath, byteArrayOutputStream.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] generateReportCurrentInventory(List<Product> products) {
+        StringBuilder html = new StringBuilder();
+        html.append("""
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <title>Reporte de Inventario Actual</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f7fc;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 80%;
+                            max-width: 1200px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            background-color: white;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 1.1em;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        tr:hover {
+                            background-color: #ddd;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .highlight {
+                            color: #4CAF50;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Inventario Actual por Producto</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad Disponible</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Fecha de Vencimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                """);
+        for (Product product : products) {
+            List<Batch> batches = product.getBatches();
+            for (Batch batch : batches) {
+                html.append(
+                        """
+                                <tr>
+                                    <td>%s</td>
+                                    <td>%s</td>
+                                    <td>$%.2f</td>
+                                    <td>$%s</td>
+                                </tr>
+                                """.formatted(product.getName(), batch.getQuantityAvalaible(), batch.getUnitPrice(), batch.getExpirationDate())
+                );
+            }
+        }
+        html.append("""
+                </tbody>
+                        </table>
+                    </div>
+                </body>
+                </html>
+                """);
+        System.out.println(html);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html.toString());
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            renderer.layout();
+            renderer.createPDF(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
