@@ -29,4 +29,9 @@ public class ClientAdapter implements IClientPersistencePort {
     public Optional<Client> getClientById(String id) {
         return mapper.toOptionalClient(repository.findById(id));
     }
+
+    @Override
+    public Optional<Client> getClientByIdOrEmail(String id, String email) {
+        return mapper.toOptionalClient(repository.findByIdOrEmail(id, email));
+    }
 }

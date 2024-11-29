@@ -4,4 +4,6 @@ public enum ReportType {
 
     CURRENT_INVENTORY,
     BEST_SELLING_PRODUCT,
+    SALES,
+    PURCHASES
 }

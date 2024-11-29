@@ -3,6 +3,7 @@ package com.trebol.inventory.adapters.driving.http.controller;
 import com.trebol.inventory.adapters.driving.http.dto.request.CreatePurchase;
 import com.trebol.inventory.configuration.exceptionhandler.ExceptionResponse;
 import com.trebol.inventory.domain.api.IPurchaseServicePort;
+import com.trebol.inventory.domain.model.Invoice;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,9 +30,8 @@ public class PurchaseController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @PostMapping()
-    public ResponseEntity<Void> savePurchase(@RequestBody CreatePurchase createPurchase){
-        service.createPurchase(createPurchase.getSupplier(), createPurchase.getDetails(), createPurchase.getPurchaseDate());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Invoice> savePurchase(@RequestBody CreatePurchase createPurchase){
+        return ResponseEntity.ok(service.createPurchase(createPurchase.getSupplier(), createPurchase.getDetails(), createPurchase.getPurchaseDate()));
     }
 
 }

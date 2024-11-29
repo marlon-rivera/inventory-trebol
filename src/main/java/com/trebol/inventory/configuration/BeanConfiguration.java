@@ -129,7 +129,7 @@ public class BeanConfiguration {
 
     @Bean
     public IPurchaseServicePort purchaseServicePort(){
-        return new PurchaseUseCaseImpl(authenticationPort(), productPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), batchPersistencePort());
+        return new PurchaseUseCaseImpl(authenticationPort(), productPersistencePort(), purchasePersistencePort(), purchaseDetailPersistencePort(), batchPersistencePort(), pdfPort());
     }
 
     @Bean

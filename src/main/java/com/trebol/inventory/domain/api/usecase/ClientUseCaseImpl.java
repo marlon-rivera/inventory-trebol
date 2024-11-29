@@ -15,7 +15,7 @@ public class ClientUseCaseImpl implements IClientServicePort {
 
     @Override
     public void createClient(Client client) {
-        if(persistencePort.getClientById(client.getId()).isPresent()) throw new ClientAlreadyExistsException();
+        if(persistencePort.getClientByIdOrEmail(client.getId(), client.getEmail()).isPresent()) throw new ClientAlreadyExistsException();
         persistencePort.createClient(client);
     }
 

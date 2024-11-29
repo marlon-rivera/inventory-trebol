@@ -10,5 +10,6 @@ public interface IClientPersistencePort {
     void createClient(Client client);
     List<Client> getAllClients();
     Optional<Client> getClientById(String id);
+    Optional<Client> getClientByIdOrEmail(String id, String email);
 
 }

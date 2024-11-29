@@ -6,6 +6,7 @@ import com.trebol.inventory.domain.model.Purchase;
 import com.trebol.inventory.domain.spi.IPurchasePersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,5 +23,10 @@ public class PurchaseAdapter implements IPurchasePersistencePort {
     @Override
     public List<Purchase> getPurchases() {
         return mapper.toPurchases(repository.findAll());
+    }
+
+    @Override
+    public List<Purchase> getPurchasesInRange(LocalDate start, LocalDate end) {
+        return mapper.toPurchases(repository.findByDatePurchasedBetween(start, end));
     }
 }

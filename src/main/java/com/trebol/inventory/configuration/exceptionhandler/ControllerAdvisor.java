@@ -1,5 +1,6 @@
 package com.trebol.inventory.configuration.exceptionhandler;
 
+import com.trebol.inventory.domain.exception.TransactionNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -42,6 +43,13 @@ public class ControllerAdvisor {
                 .toList();
         return ResponseEntity.badRequest().body(
                 new ValidationExceptionResponse(errorsMessages, HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now())
+        );
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleTransactionNotFoundException(TransactionNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ExceptionResponse(ex.getMessage(), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now())
         );
     }
 }

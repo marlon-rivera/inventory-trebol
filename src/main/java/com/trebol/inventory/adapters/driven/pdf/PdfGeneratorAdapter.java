@@ -6,7 +6,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PdfGeneratorAdapter implements IPdfPort {
@@ -203,7 +203,6 @@ public class PdfGeneratorAdapter implements IPdfPort {
                 </body>
                 </html>
                 """);
-        System.out.println(html);
         ITextRenderer renderer = new ITextRenderer();
         renderer.setDocumentFromString(html.toString());
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -217,9 +216,407 @@ public class PdfGeneratorAdapter implements IPdfPort {
     }
 
     @Override
-    public byte[] generateReportBestSellingProduct(Product product) {
+    public byte[] generateReportBestSellingProduct(Product product, ProductSalesInfo bestSaleInfo) {
         StringBuilder html = new StringBuilder();
-
-        return null;
+        html.append("""
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <title>Producto mas vendido</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f7fc;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 80%;
+                            max-width: 1200px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            background-color: white;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 1.1em;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        tr:hover {
+                            background-color: #ddd;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .highlight {
+                            color: #4CAF50;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Producto mas vendido</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad Vendida</th>
+                                    <th>Total vendido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                """);
+        html.append(
+                """
+                        <tr>
+                            <td>%s</td>
+                            <td>%s</td>
+                            <td>$%.2f</td>
+                        </tr>
+                        """.formatted(product.getName() + " - " + product.getBrand().getName(), bestSaleInfo.getQuantitySold(), bestSaleInfo.getTotalSales())
+        );
+        html.append("""
+                </tbody>
+                        </table>
+                    </div>
+                </body>
+                </html>
+                """);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html.toString());
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            renderer.layout();
+            renderer.createPDF(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    @Override
+    public byte[] generateReportSales(int quantitySales, BigDecimal totalSales, BigDecimal totalGross, BigDecimal totalIva) {
+        StringBuilder html = new StringBuilder();
+        html.append("""
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <title>Reporte de ventas</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f7fc;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 80%;
+                            max-width: 1200px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            background-color: white;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 1.1em;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        tr:hover {
+                            background-color: #ddd;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .highlight {
+                            color: #4CAF50;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Reporte de ventas</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Total de ventas</th>
+                                    <th>Total BRUTO </th>
+                                    <th>Total IVA</th>
+                                    <th>Total NETO vendido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                """);
+        html.append(
+                """
+                        <tr>
+                            <td>%s</td>
+                            <td>$%.2f</td>
+                            <td>$%.2f</td>
+                            <td>$%.2f</td>
+                        </tr>
+                        """.formatted(quantitySales, totalGross, totalIva, totalSales)
+        );
+        html.append("""
+                </tbody>
+                        </table>
+                    </div>
+                </body>
+                </html>
+                """);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html.toString());
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            renderer.layout();
+            renderer.createPDF(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] generateReportPurchases(int quantityPurchases, BigDecimal totalPurchases) {
+        StringBuilder html = new StringBuilder();
+        html.append("""
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <title>Reporte de ventas</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f7fc;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 80%;
+                            max-width: 1200px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            background-color: white;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 1.1em;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        tr:hover {
+                            background-color: #ddd;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .highlight {
+                            color: #4CAF50;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Reporte de ventas</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Total de ventas</th>
+                                    <th>Total comprado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                """);
+        html.append(
+                """
+                        <tr>
+                            <td>%s</td>
+                            <td>$%.2f</td>
+                        </tr>
+                        """.formatted(quantityPurchases, totalPurchases)
+        );
+        html.append("""
+                </tbody>
+                        </table>
+                    </div>
+                </body>
+                </html>
+                """);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html.toString());
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            renderer.layout();
+            renderer.createPDF(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] generatePdfBacthes(List<Batch> batches) {
+        StringBuilder html = new StringBuilder();
+        html.append("""
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8"></meta>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+                    <title>Tickets</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f7fc;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .container {
+                            width: 80%;
+                            max-width: 1200px;
+                            margin: 30px auto;
+                            padding: 20px;
+                            background-color: white;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                            margin-bottom: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            padding: 12px;
+                            text-align: left;
+                            border: 1px solid #ddd;
+                        }
+                        th {
+                            background-color: #4CAF50;
+                            color: white;
+                            font-size: 1.1em;
+                        }
+                        tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+                        tr:hover {
+                            background-color: #ddd;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .highlight {
+                            color: #4CAF50;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Identifiación Productos</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Fecha de vencimiento</th>
+                                    <th>Lote</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                """);
+        for(Batch batch: batches) {
+            html.append("""
+                    <tr>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                    </tr>
+                    """.formatted(batch.getProduct().getName(), batch.getExpirationDate(), batch.getId()));
+        }
+        html.append("""
+                </tbody>
+                        </table>
+                    </div>
+                </body>
+                </html>
+                """);
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html.toString());
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            renderer.layout();
+            renderer.createPDF(byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

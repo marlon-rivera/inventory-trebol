@@ -1,5 +1,6 @@
 package com.trebol.inventory.domain.api;
 
+import com.trebol.inventory.domain.model.Invoice;
 import com.trebol.inventory.domain.model.PurchaseDetail;
 import com.trebol.inventory.domain.model.Supplier;
 
@@ -8,6 +9,6 @@ import java.util.List;
 
 public interface IPurchaseServicePort {
 
-    void createPurchase(Supplier supplier, List<PurchaseDetail> detailList, LocalDate purchaseDate);
+    Invoice createPurchase(Supplier supplier, List<PurchaseDetail> detailList, LocalDate purchaseDate);
 
 }
