@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,7 +37,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Conflicto: la marca o categoría no existen",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createProduct(
             @RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -90,7 +89,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de productos agrupados por categoría")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<ProductsCategory>> getProductsByCategory() {
         return ResponseEntity.ok(productService.getAllProducts());
     }

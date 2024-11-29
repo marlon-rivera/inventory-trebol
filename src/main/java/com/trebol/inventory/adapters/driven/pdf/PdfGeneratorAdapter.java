@@ -190,9 +190,9 @@ public class PdfGeneratorAdapter implements IPdfPort {
                                     <td>%s</td>
                                     <td>%s</td>
                                     <td>$%.2f</td>
-                                    <td>$%s</td>
+                                    <td>%s</td>
                                 </tr>
-                                """.formatted(product.getName(), batch.getQuantityAvalaible(), batch.getUnitPrice(), batch.getExpirationDate())
+                                """.formatted(product.getName() + " - " + product.getBrand().getName(), batch.getQuantityAvalaible(), batch.getUnitPrice(), batch.getExpirationDate() == null ? "N/A" : batch.getExpirationDate())
                 );
             }
         }
@@ -214,5 +214,12 @@ public class PdfGeneratorAdapter implements IPdfPort {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public byte[] generateReportBestSellingProduct(Product product) {
+        StringBuilder html = new StringBuilder();
+
+        return null;
     }
 }

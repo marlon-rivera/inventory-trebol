@@ -6,6 +6,7 @@ import com.trebol.inventory.domain.model.Sale;
 import com.trebol.inventory.domain.spi.ISalePersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,5 +23,10 @@ public class SaleAdapter implements ISalePersistencePort {
     @Override
     public List<Sale> getSales() {
         return mapper.toSales(repository.findAll());
+    }
+
+    @Override
+    public List<Sale> getSalesInRange(LocalDate start, LocalDate end) {
+        return mapper.toSales(repository.findByDateBetween(start, end));
     }
 }

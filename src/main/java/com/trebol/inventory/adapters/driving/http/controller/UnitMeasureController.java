@@ -37,7 +37,7 @@ public class UnitMeasureController {
             @ApiResponse(responseCode = "409", description = "Conflicto: la unidad de medida ya existe con el mismo nombre", content =
             @Content(mediaType = "application/json",schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createUnitMeasure(@Valid @RequestBody CreateUnitMeasure createUnitMeasure){
         unitMeasureService.saveUnitMeasure(createUnitMeasure.getName());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -52,7 +52,7 @@ public class UnitMeasureController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de unidades de medida obtenida exitosamente")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<UnitMeasure>> getUnitsMeasure(){
         return ResponseEntity.ok(unitMeasureService.getUnitMeasures());
     }

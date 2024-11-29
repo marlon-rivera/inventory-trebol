@@ -5,6 +5,7 @@ import com.trebol.inventory.domain.model.*;
 import com.trebol.inventory.domain.spi.*;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,18 +52,27 @@ public class TransactionUseCaseImpl implements ITransactionServicePort {
     }
 
     @Override
-    public byte[] generateReport(ReportType type) {
+    public Invoice generateReport(ReportType type) {
         if(type.equals(ReportType.CURRENT_INVENTORY)){
-            generateReportCurrentInventory();
+            return generateReportCurrentInventory();
         }
-        return new byte[0];
+        if(type.equals(ReportType.BEST_SELLING_PRODUCT)){
+
+        }
+        return new Invoice("", null);
     }
 
-    private byte[] generateReportCurrentInventory(){
+    private Invoice generateReportCurrentInventory(){
         List<Product> products = productPersistencePort.getAllProducts();
         for(Product product: products){
             product.setBatches(batchPersistencePort.getBatchsByProduct(product));
         }
-        return pdfPort.generateReportCurrentInventory(products);
+        return new Invoice("REPORTE_INVENTARIO_ACTUAL", pdfPort.generateReportCurrentInventory(products)) ;
+    }
+
+    private Invoice generateReportBestSellingProduct(LocalDate start, LocalDate end){
+        List<Sale> sales = salePersistencePort.getSalesInRange(start, end);
+
+        return new Invoice("", null);
     }
 }

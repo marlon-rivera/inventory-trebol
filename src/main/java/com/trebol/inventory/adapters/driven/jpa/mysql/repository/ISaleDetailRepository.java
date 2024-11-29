@@ -8,5 +8,6 @@ import java.util.List;
 public interface ISaleDetailRepository extends JpaRepository<SaleDetailEntity, Long> {
 
     List<SaleDetailEntity> findBySaleId(Long saleId);
+    List<SaleDetailEntity> findBySaleIdAndProductId(Long saleId, String productId);
 
 }

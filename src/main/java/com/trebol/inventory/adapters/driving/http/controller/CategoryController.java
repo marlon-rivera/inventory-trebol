@@ -37,7 +37,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "409", description = "Conflicto: la categoría ya existe con el mismo nombre", content = @Content ( mediaType
             = "application/json", schema = @Schema(implementation = ExceptionResponse.class))),
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategory createCategory) {
         categoryService.saveCategory(createCategory.getName());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -52,7 +52,7 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de categorías obtenida exitosamente")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }

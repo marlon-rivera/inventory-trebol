@@ -40,7 +40,7 @@ public class ClientController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse .class)))
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createClient(@Valid @RequestBody CreateClient createClient) {
         clientService.createClient(requestMapper.toClient(createClient));
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -55,7 +55,7 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de clientes obtenida exitosamente")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Client>> getAllClients() {
         return ResponseEntity.ok(clientService.getAllClients());
     }

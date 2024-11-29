@@ -11,5 +11,6 @@ public interface IPdfPort {
 
     Invoice generateInvoicePdf(Sale sale, List<SaleDetail> details);
     byte[] generateReportCurrentInventory(List<Product> products);
+    byte[] generateReportBestSellingProduct(Product product);
 
 }

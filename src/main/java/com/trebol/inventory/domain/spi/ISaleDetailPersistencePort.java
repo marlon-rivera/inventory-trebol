@@ -8,5 +8,6 @@ public interface ISaleDetailPersistencePort {
 
     void saveSaleDetail(SaleDetail saleDetail);
     List<SaleDetail> loadSaleDetailsBySaleId(Long saleId);
+    List<SaleDetail> loadSaleDetailsBySaleIdAndProductId(Long saleId, String productId);
 
 }

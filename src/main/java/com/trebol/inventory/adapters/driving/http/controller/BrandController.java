@@ -37,7 +37,7 @@ public class BrandController {
             @ApiResponse(responseCode = "409", description = "Conflicto: la marca ya existe con el mismo nombre", content =
             @Content(mediaType = "application/json",schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createBrand(@Valid @RequestBody CreateBrand brand) {
         brandService.saveBrand(brand.getName());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -52,7 +52,7 @@ public class BrandController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de marcas obtenida exitosamente")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Brand>> getAllBrands() {
         List<Brand> brands = brandService.getAllBrands();
         return ResponseEntity.ok(brands);

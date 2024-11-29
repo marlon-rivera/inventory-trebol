@@ -18,7 +18,7 @@ public class SaleController {
 
     private final ISaleServicePort servicePort;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Invoice> saveSale(@Valid @RequestBody CreateSale createSale){
         return ResponseEntity.ok(servicePort.saveSale(createSale.getDetails(), createSale.getClient(), createSale.getTypeInvoice(), createSale.getSaleDate()));
     }

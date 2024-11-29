@@ -28,7 +28,7 @@ public class PurchaseController {
             @ApiResponse(responseCode = "404", description = "Conflicto: un producto no existe",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> savePurchase(@RequestBody CreatePurchase createPurchase){
         service.createPurchase(createPurchase.getSupplier(), createPurchase.getDetails(), createPurchase.getPurchaseDate());
         return ResponseEntity.ok().build();

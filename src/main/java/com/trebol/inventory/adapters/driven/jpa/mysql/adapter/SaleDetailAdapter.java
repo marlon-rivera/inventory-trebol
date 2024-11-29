@@ -23,4 +23,9 @@ public class SaleDetailAdapter implements ISaleDetailPersistencePort {
     public List<SaleDetail> loadSaleDetailsBySaleId(Long saleId) {
         return mapper.toSaleDetails(repository.findBySaleId(saleId));
     }
+
+    @Override
+    public List<SaleDetail> loadSaleDetailsBySaleIdAndProductId(Long saleId, String productId) {
+        return mapper.toSaleDetails(repository.findBySaleIdAndProductId(saleId, productId));
+    }
 }

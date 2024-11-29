@@ -154,6 +154,11 @@ public class ProductUseCaseImpl implements IProductServicePort {
         List<Supplier> suppliers = supplierPersistencePort.getAllSuppliers();
         List<ProductsSupplier> productsSuppliers = new ArrayList<>();
         for (Supplier supplier : suppliers){
+            List<Product> products = productPersistencePort.getProductsBySupplier(supplier.getId());
+            for (Product product : products){
+                List<Batch> batches = batchPersistencePort.getBatchsByProduct(product);
+                product.setTotalAvailable(batches.stream().mapToInt(Batch::getQuantityAvalaible).sum());
+            }
             productsSuppliers.add(
                     new ProductsSupplier(
                             supplier,

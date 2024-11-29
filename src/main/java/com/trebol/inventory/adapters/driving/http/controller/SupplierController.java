@@ -33,7 +33,7 @@ public class SupplierController {
             @ApiResponse(responseCode = "409", description = "Conflicto: El proveedor con ese id ya existe.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createSupplier(@Valid @RequestBody CreateSupplier createSupplier){
         servicePort.saveSupplier(mapper.toSupplier(createSupplier));
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -69,7 +69,7 @@ public class SupplierController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de proveedores recuperada exitosamente")
     })
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Supplier>> getAllSuppliers() {
         List<Supplier> suppliers = servicePort.getAllSuppliers();
         return ResponseEntity.ok(suppliers);
